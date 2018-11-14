@@ -10,7 +10,6 @@ import IceIcon from '@icedesign/icon';
 import './Login.scss';
 import axios from 'axios';
 import { BrowserRouter as Router, Link,withRouter } from "react-router-dom";
-// import { hashHistory } from 'react-router';
 
 const { Row, Col } = Grid;
 
@@ -85,7 +84,6 @@ class Login extends Component {
   };
 
   render() {
-    console.log(withRouter)
     return (
       <div style={styles.container} className="user-login">
         <div style={styles.header}>

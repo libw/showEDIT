@@ -5,6 +5,11 @@ import { Switch, Route, HashRouter as Router } from 'react-router-dom';
 import React from 'react';
 
 import routerConfig from './routerConfig';
+import dataReducer from './reducer'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux';
+
+let store = createStore(dataReducer)
 
 /**
  * 将路由信息扁平化，继承上一级路由的 path
@@ -116,4 +121,4 @@ function renderRouterConfigV4(container, router, contextPath) {
 
 const routerWithReactRouter4 = recursiveRouterConfigV4(routerConfig);
 const routeChildren = renderRouterConfigV4(null, routerWithReactRouter4, '/');
-export default <Router>{routeChildren}</Router>;
+export default <Router><Provider store={store} >{routeChildren}</Provider></Router>;

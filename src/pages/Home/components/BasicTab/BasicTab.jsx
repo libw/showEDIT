@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import { Tab } from '@icedesign/base';
 import IceContainer from '@icedesign/container';
 import './BasicTab.scss';
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {homeSwtich} from '../../../../actions'
 
-export default class BasicTab extends Component {
+class BasicTab extends Component {
   static displayName = 'BasicTab';
+
+  switch=(e)=>{
+    this.props.homeSwtich({payload: e})
+
+  }
 
   render() {
     const tabs = [
@@ -19,7 +27,7 @@ export default class BasicTab extends Component {
         <IceContainer style={styles.tabCardStyle}>
           <Tab contentStyle={{ display: 'none' }}>
             {tabs.map((item) => {
-              return <Tab.TabPane key={item.key} tab={item.tab} />;
+              return <Tab.TabPane key={item.key} tab={item.tab} onClick={this.switch.bind(item.key)}/>;
             })}
           </Tab>
         </IceContainer>
@@ -33,3 +41,19 @@ const styles = {
     padding: 0,
   },
 };
+
+function mapStateToProps(state, props) {
+  return {
+      
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    homeSwtich: bindActionCreators(homeSwtich, dispatch)
+  }
+}
+
+BasicTab = connect(mapStateToProps, mapDispatchToProps)(BasicTab)
+
+export default BasicTab

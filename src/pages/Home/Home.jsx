@@ -6,6 +6,8 @@ import PerformanceChart from './components/PerformanceChart';
 import GeneralWidget from './components/GeneralWidget';
 import { withRouter } from "react-router-dom";
 import {  Feedback } from '@icedesign/base';
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 class Home extends Component {
   static displayName = 'Home';
@@ -13,7 +15,8 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: sessionStorage.getItem('token') 
+      isLogin: sessionStorage.getItem('token') ,
+      show:this.props.show
     };
   }
 
@@ -27,6 +30,18 @@ class Home extends Component {
     }
   }
 
+  showSwtich(e){
+    if(e=='dashboard'){
+      return <RealTimeOverview />
+    }else if(e=='analysis'){
+      return <Notifications />
+    }else if(e=='monitor'){
+      return <GeneralWidget />
+    }else if(e=='workplace'){
+      return <PerformanceChart />
+    }
+  }
+
   render() {
     if (!this.state.isLogin) {
       return null
@@ -34,12 +49,27 @@ class Home extends Component {
     return (
       <div className="home-page">
         <BasicTab />
-        <RealTimeOverview />
+{this.showSwtich(this.state.show)}
+        {/* <RealTimeOverview />
         <Notifications />
         <GeneralWidget />
-        <PerformanceChart />
+        <PerformanceChart /> */}
       </div>
     );
   }
 }
+
+function mapStateToProps(state, props) {
+  return {
+    show:state.show
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    
+  }
+}
+
+Home = connect(mapStateToProps, mapDispatchToProps)(Home)
 export default withRouter(Home)
