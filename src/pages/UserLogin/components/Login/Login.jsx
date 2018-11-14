@@ -9,7 +9,8 @@ import {
 import IceIcon from '@icedesign/icon';
 import './Login.scss';
 import axios from 'axios';
-import { BrowserRouter as Router, Link} from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
+import { hashHistory } from 'react-router';
 
 const { Row, Col } = Grid;
 
@@ -37,6 +38,7 @@ export default class Login extends Component {
     });
   };
 
+  
   handleSubmit = (e) => {
     e.preventDefault();
     this.refs.form.validateAll((errors, values) => {
@@ -48,22 +50,32 @@ export default class Login extends Component {
       axios.post('http://47.99.112.182:4030/v1/login', {
         username: values.account,
         password: values.password
-      })
-      .then(function (response) {
-        console.log('values:', values);
-        if(response.data.code==0){
-          Feedback.toast.success('登录成功');
-          // 登录成功后做对应的逻辑处理
-          sessionStorage.setItem('token', response.data.data.token)
-        }
-      
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      }
+        // ,{
+        //   headers: {
+        //       'Authorization':sessionStorage.getItem('token'),
+
+        //   }}
+      )
+        .then(function (response) {
+          console.log('values:', values);
+          if (response.data.code == 0) {
+            Feedback.toast.success('登录成功');
+            // 登录成功后做对应的逻辑处理
+            sessionStorage.setItem('token', response.data.data.token)
+            hashHistory.push('/')
+
+          } else {
+            Feedback.toast.success('账户名或者密码');
+          }
+
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
 
-      
+
     });
   };
 

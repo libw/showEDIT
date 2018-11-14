@@ -87,6 +87,10 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
     this.toggleMenu();
   };
 
+  logout=()=>{
+    sessionStorage.removeItem('token')
+  }
+
   /**
    * 当前展开的菜单项
    */
@@ -214,7 +218,7 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
                 fontSize: 12,
               }}
             >
-              <IceImg
+              {/* <IceImg
                 height={40}
                 width={40}
                 src={require('./images/TB1ONhloamWBuNjy1XaXXXCbXXa-200-200.png')}
@@ -235,7 +239,12 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
                   技术部
                 </span>
               </div>
+               */}
+              <button onClick={this.logout}>
+                登出
+              </button>
             </div>
+           
 
             {/* 侧边菜单项 end */}
           </Layout.Aside>

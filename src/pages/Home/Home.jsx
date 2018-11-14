@@ -4,6 +4,7 @@ import RealTimeOverview from './components/RealTimeOverview';
 import Notifications from './components/Notifications';
 import PerformanceChart from './components/PerformanceChart';
 import GeneralWidget from './components/GeneralWidget';
+import {hashHistory} from 'react-router'
 
 export default class Home extends Component {
   static displayName = 'Home';
@@ -11,6 +12,12 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount(){
+    if(!sessionStorage.getItem('token')){
+      hashHistory.push('/userLogin')
+    }
   }
 
   render() {
