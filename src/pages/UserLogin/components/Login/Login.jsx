@@ -9,12 +9,12 @@ import {
 import IceIcon from '@icedesign/icon';
 import './Login.scss';
 import axios from 'axios';
-import { BrowserRouter as Router, Link } from "react-router-dom";
-import { hashHistory } from 'react-router';
+import { BrowserRouter as Router, Link,withRouter } from "react-router-dom";
+// import { hashHistory } from 'react-router';
 
 const { Row, Col } = Grid;
 
-export default class Login extends Component {
+class Login extends Component {
   static displayName = 'Login';
 
   static propTypes = {};
@@ -41,6 +41,7 @@ export default class Login extends Component {
   
   handleSubmit = (e) => {
     e.preventDefault();
+    var that=this
     this.refs.form.validateAll((errors, values) => {
       if (errors) {
         console.log('errors', errors);
@@ -63,7 +64,11 @@ export default class Login extends Component {
             Feedback.toast.success('登录成功');
             // 登录成功后做对应的逻辑处理
             sessionStorage.setItem('token', response.data.data.token)
-            hashHistory.push('/')
+
+            const {history} = that.props;
+            setTimeout(() => {
+                history.replace("/");
+            }, 1000)
 
           } else {
             Feedback.toast.success('账户名或者密码');
@@ -80,6 +85,7 @@ export default class Login extends Component {
   };
 
   render() {
+    console.log(withRouter)
     return (
       <div style={styles.container} className="user-login">
         <div style={styles.header}>
@@ -262,3 +268,6 @@ const styles = {
     margin: '0 8px',
   },
 };
+
+
+export default withRouter(Login)
