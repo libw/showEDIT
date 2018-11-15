@@ -12,10 +12,14 @@ import Logo from './components/Logo';
 import asideMenuConfig from '../../menuConfig';
 import './scss/light.scss';
 import './scss/dark.scss';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { noLogin } from '../../actions'
+
 
 // 设置默认的皮肤配置，支持 dark 和 light 两套皮肤配置
 const theme = typeof THEME === 'undefined' ? 'light' : THEME;
-export default class HeaderAsideFooterResponsiveLayout extends Component {
+class HeaderAsideFooterResponsiveLayout extends Component {
   static propTypes = {};
 
   static defaultProps = {};
@@ -87,8 +91,9 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
     this.toggleMenu();
   };
 
-  logout=()=>{
-    sessionStorage.removeItem('token')
+  logout = () => {
+    this.props.noLogin({ payload: false })
+    console.log(sessionStorage.getItem('token')&&this.props.isLoginState)
   }
 
   /**
@@ -216,9 +221,11 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
                 display: 'flex',
                 alignItems: 'center',
                 fontSize: 12,
+                display: sessionStorage.getItem('token')&&this.props.isLoginState ? '' : 'none'
               }}
             >
-              {/* <IceImg
+
+              <IceImg
                 height={40}
                 width={40}
                 src={require('./images/TB1ONhloamWBuNjy1XaXXXCbXXa-200-200.png')}
@@ -239,12 +246,20 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
                   技术部
                 </span>
               </div>
-               */}
-              <button onClick={this.logout}>
+
+
+              <button onClick={this.logout} style={{
+                display: 'block',
+                backgroundColor:'blue',
+                border:'none',
+                padding: '10px 20px'
+              }}>
                 登出
               </button>
+
+
             </div>
-           
+
 
             {/* 侧边菜单项 end */}
           </Layout.Aside>
@@ -255,3 +270,19 @@ export default class HeaderAsideFooterResponsiveLayout extends Component {
     );
   }
 }
+
+
+function mapStateToProps(state, props) {
+  return {
+    isLoginState: state.isLogin
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    noLogin: bindActionCreators(noLogin, dispatch)
+  }
+}
+
+HeaderAsideFooterResponsiveLayout = connect(mapStateToProps, mapDispatchToProps)(HeaderAsideFooterResponsiveLayout)
+export default HeaderAsideFooterResponsiveLayout

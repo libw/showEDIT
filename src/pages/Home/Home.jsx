@@ -7,7 +7,6 @@ import GeneralWidget from './components/GeneralWidget';
 import { withRouter } from "react-router-dom";
 import {  Feedback } from '@icedesign/base';
 import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
 
 class Home extends Component {
   static displayName = 'Home';
@@ -16,40 +15,50 @@ class Home extends Component {
     super(props);
     this.state = {
       isLogin: sessionStorage.getItem('token') ,
-      show:this.props.show
+
     };
   }
 
-  componentWillMount() {
-    if (!this.state.isLogin) {
+  showSwtich(e){
+    console.log(e)
+    switch(e){
+      case 'dashboard':
+      return <RealTimeOverview />
+      break
+      case 'analysis':
+      return <Notifications />
+      break
+      case 'monitor':
+      return <GeneralWidget />
+      break
+      case 'workplace':
+      return <PerformanceChart />
+      break
+    }
+    // if(e=='dashboard'){
+    //   return 
+    // }else if(e=='analysis'){
+    //   return <Notifications />
+    // }else if(e=='monitor'){
+    //   return <GeneralWidget />
+    // }else if(e=='workplace'){
+    //   return <PerformanceChart />
+    // }
+  }
+
+  render() {
+    if (!(sessionStorage.getItem('token')&&this.props.isLoginState)) {
       Feedback.toast.success('尚未登陆');
       const { history } = this.props;
       setTimeout(() => {
         history.replace("/userLogin");
       }, 1000)
     }
-  }
-
-  showSwtich(e){
-    if(e=='dashboard'){
-      return <RealTimeOverview />
-    }else if(e=='analysis'){
-      return <Notifications />
-    }else if(e=='monitor'){
-      return <GeneralWidget />
-    }else if(e=='workplace'){
-      return <PerformanceChart />
-    }
-  }
-
-  render() {
-    if (!this.state.isLogin) {
-      return null
-    }
+    // console.log(sessionStorage.getItem('token'))
     return (
       <div className="home-page">
         <BasicTab />
-{this.showSwtich(this.state.show)}
+{this.showSwtich(this.props.show)}
         {/* <RealTimeOverview />
         <Notifications />
         <GeneralWidget />
@@ -61,7 +70,8 @@ class Home extends Component {
 
 function mapStateToProps(state, props) {
   return {
-    show:state.show
+    show:state.show,
+    isLoginState:state.isLogin
   }
 }
 

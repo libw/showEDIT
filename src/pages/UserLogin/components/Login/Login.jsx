@@ -10,6 +10,9 @@ import IceIcon from '@icedesign/icon';
 import './Login.scss';
 import axios from 'axios';
 import { BrowserRouter as Router, Link,withRouter } from "react-router-dom";
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {isLogin} from '../../../../actions'
 
 const { Row, Col } = Grid;
 
@@ -63,7 +66,7 @@ class Login extends Component {
             Feedback.toast.success('登录成功');
             // 登录成功后做对应的逻辑处理
             sessionStorage.setItem('token', response.data.data.token)
-
+              that.props.isLogin({payload: true})
             const {history} = that.props;
             setTimeout(() => {
                 history.replace("/");
@@ -77,9 +80,6 @@ class Login extends Component {
         .catch(function (error) {
           console.log(error);
         });
-
-
-
     });
   };
 
@@ -267,5 +267,17 @@ const styles = {
   },
 };
 
+function mapStateToProps(state, props) {
+  return {
+    
+  }
+}
 
+function mapDispatchToProps(dispatch) {
+  return {
+    isLogin: bindActionCreators(isLogin, dispatch)
+  }
+}
+
+Login = connect(mapStateToProps, mapDispatchToProps)(Login)
 export default withRouter(Login)
